@@ -2,19 +2,16 @@
   <head>
     <style>
       body {
-        background: red;
+        <%= @color %>;
           }
-        <p>
-        </style>
-          <!-- "<%= display_message %>" -->
-          </p>
-          <p>
-          <%= message %>
-          </p>
-          <form>
-          <input type= 'text' name= 'guess' />
+    </style>
+  </head>
+    <p>
+      <%= message %>
+    </p>
+      <form>
+        <input type= 'text' name= 'guess' />
         <input type= 'submit' value= 'Guess!' />
-        </form>
-      </body>
-    </head>
+      </form>
+    </body>  
 </html>
