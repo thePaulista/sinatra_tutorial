@@ -8,21 +8,20 @@ SECRET_NUMBER = rand(100)
 @direction
 
 get '/' do
-welcome
-count
+  welcome
+  count
+  guess = params['guess'].to_i
+    if params['cheat']
+      return cheat_mode
+    end
+  message = check_guess(guess)
 
-guess = params['guess'].to_i
-if params['cheat']
-  return cheat_mode
-end
-message = check_guess(guess)
 
-
-erb :index, :locals => {:number  => SECRET_NUMBER,
-                        :message => message,
-                        :color => @color,
-                        :direction => @direction
-                        }
+  erb :index, :locals => {:number  => SECRET_NUMBER,
+                          :message => message,
+                          :color => @color,
+                          :direction => @direction
+                          }
 end
 
 def welcome
@@ -74,6 +73,5 @@ def check_guess(guess)
 end
 
 def cheat_mode
-  @color
   @direction = "The SECRET NUMBER is #{SECRET_NUMBER}"
 end
