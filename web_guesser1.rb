@@ -2,24 +2,35 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'pry'
 
-@@count = 6
 SECRET_NUMBER = rand(100)
 @color = "background:#FBEFF2"
+@@count = 6
+@direction
 
 get '/' do
+welcome
 guess = params['guess'].to_i
 count
 message = check_guess(guess)
 # count
 erb :index, :locals => {:number  => SECRET_NUMBER,
                         :message => message,
-                        :color => @color
+                        :color => @color,
+                        :direction => @direction
                         }
 end
 
+def welcome
+  if @@count == 5
+    @direction = "Guess a number between 0-100"
+  else
+    @direction = "keep trying"
+  end
+end
+
  def count
-   if @@count == 0
-     message = "Restart game with 5 new tries"
+   if @@count == 1
+     @direction = "Restart game with 5 new tries"
      restart_game
    else
      @@count -= 1
@@ -33,7 +44,10 @@ end
 
 
 def check_guess(guess)
-  if guess < SECRET_NUMBER - 5
+  if @@count == 5
+    @color = "background:#FBEFF2"
+    message = "Good luck!"
+  elsif guess < SECRET_NUMBER - 5
     @color = "background: #F2F5A9"
     message = "Way way too low. Muy bajo senor!"
   elsif guess < SECRET_NUMBER
