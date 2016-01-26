@@ -12,12 +12,13 @@
     <p>
       <%= message %>
     </p>
-    <p>
-      <%= @@count %> more tries.
-    </p>
+
       <form>
         <input type= 'text' name= 'guess' />
         <input type= 'submit' value= 'Guess!' />
       </form>
+      <p>
+        <%= @@count %> tries left
+      </p>
     </body>
 </html>

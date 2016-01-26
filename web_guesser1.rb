@@ -9,10 +9,15 @@ SECRET_NUMBER = rand(100)
 
 get '/' do
 welcome
-guess = params['guess'].to_i
 count
+
+guess = params['guess'].to_i
+if params['cheat']
+  return cheat_mode
+end
 message = check_guess(guess)
-# count
+
+
 erb :index, :locals => {:number  => SECRET_NUMBER,
                         :message => message,
                         :color => @color,
@@ -21,10 +26,10 @@ erb :index, :locals => {:number  => SECRET_NUMBER,
 end
 
 def welcome
-  if @@count == 5
-    @direction = "Guess a number between 0-100"
+  if @@count == 6
+    @direction = "Guess a number between 0-99"
   else
-    @direction = "keep trying"
+    @direction = "Keep going"
   end
 end
 
@@ -47,6 +52,8 @@ def check_guess(guess)
   if @@count == 5
     @color = "background:#FBEFF2"
     message = "Good luck!"
+  elsif guess && params["&cheat=true"]
+    message   = "#{SECRET_NUMBER}"
   elsif guess < SECRET_NUMBER - 5
     @color = "background: #F2F5A9"
     message = "Way way too low. Muy bajo senor!"
@@ -66,7 +73,7 @@ def check_guess(guess)
   end
 end
 
-
-  # <!-- <p>
-  # "<%= display_message %>"
-  # </p> -->
+def cheat_mode
+  @color
+  @direction = "The SECRET NUMBER is #{SECRET_NUMBER}"
+end
