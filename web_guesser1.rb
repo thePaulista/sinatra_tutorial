@@ -14,11 +14,10 @@ get '/' do
     if params['cheat']
       return cheat_mode
     end
-  message = check_guess(guess)
-
+  @message = check_guess(guess)
 
   erb :index, :locals => {:number  => SECRET_NUMBER,
-                          :message => message,
+                          :message => @message,
                           :color => @color,
                           :direction => @direction
                           }
@@ -32,46 +31,67 @@ def welcome
   end
 end
 
- def count
-   if @@count == 1
-     @direction = "Restart game with 5 new tries"
-     restart_game
-   else
-     @@count -= 1
-   end
+def count
+ if @@count == 1
+   @direction = "Restart game with 5 new tries"
+   restart_game
+ else
+   @@count -= 1
  end
+end
 
- def restart_game
-   SECRET_NUMBER
-   @@count = 5
- end
-
+def restart_game
+ SECRET_NUMBER
+ @@count = 5
+end
 
 def check_guess(guess)
   if @@count == 5
-    @color = "background:#FBEFF2"
-    message = "Good luck!"
-  elsif guess && params["&cheat=true"]
-    message   = "#{SECRET_NUMBER}"
+    start
   elsif guess < SECRET_NUMBER - 5
-    @color = "background: #F2F5A9"
-    message = "Way way too low. Muy bajo senor!"
+    low
   elsif guess < SECRET_NUMBER
-    @color = "background: #FE9A2E"
-    message = "Almost there. Go up a wee bit!"
+    low_but_close
   elsif guess > SECRET_NUMBER + 5
-    @color = "background: #AEB404"
-    message = "Too cold, and too high. Try again!"
+    high
   elsif guess > SECRET_NUMBER
-    @color = "background: #BE81F7"
-    messsage = "Close! But its still high"
+    high_but_close
   else
-    @color = "background: #FA58D0"
-    message = "Yup! The SECRET NUMBER was #{SECRET_NUMBER}"
+    winner
     restart_game
   end
 end
 
+def start
+  @color = "background:#FBEFF2"
+  @message = "Good luck!"
+end
+
+def low
+  @color = "background: #F2F5A9"
+  @message = "Way way too low. Muy bajo senor!"
+end
+
+def low_but_close
+  @color = "background: #FE9A2E"
+  @message = "Almost there. Go up a wee bit!"
+end
+
+def high
+  @color = "background: #AEB404"
+  @message = "Too cold, and too high. Try again!"
+end
+
+def high_but_close
+  @color = "background: #BE81F7"
+  @messsage = "Close! But its still high"
+end
+
+def winner
+  @color = "background: #FA58D0"
+  @message = "Yup! The SECRET NUMBER was #{SECRET_NUMBER}"
+end
+
 def cheat_mode
-  @direction = "The SECRET NUMBER is #{SECRET_NUMBER}"
+  @message = "The SECRET NUMBER is #{SECRET_NUMBER}"
 end
