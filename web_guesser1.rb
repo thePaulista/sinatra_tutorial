@@ -57,8 +57,9 @@ def check_guess(guess)
   elsif guess > SECRET_NUMBER
     high_but_close
   else
-    winner
     restart_game
+    @direction = "Congratulations!"
+    winner
   end
 end
 
